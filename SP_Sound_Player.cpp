@@ -37,10 +37,10 @@ DWORD startTime;
  */
 class PolarStorage {
 private:
-	const float *entries;
+  const float *entries;
   const float right_ear_values[24] = { 0.0f, 2.7f, 5.0f, 7.5f, 8.5f, 9.3f, 9.7f, 7.7f, 4.9f, 2.0f, -1.5f, -3.5f, -5.0f, -6.5f, -9.0f, -12.0f, -13.0f, -13.0f, -12.0f, -11.0f, -10.5f, -8.0f, -5.0f, -2.5f };
   const float left_ear_values[24] = { 0.0f, -2.5f, -5.0f, -8.0f, -10.5f, -11.0f, -12.0f, -13.0f, -13.0f, -12.0f, -9.0f, -6.5f, -5.0f, -3.5f, -1.5f, 2.0f, 4.9f, 7.7f, 9.7f, 9.3f, 8.5f, 7.5f, 5.0f, 2.7f };
-	const uint32_t num_entries = 24;
+  const uint32_t num_entries = 24;
 
 public:
   enum class earSide : uint8_t {
@@ -48,38 +48,38 @@ public:
     RIGHT = 1
   };
 
-	PolarStorage(earSide side) {
+  PolarStorage(earSide side) {
     entries = (uint8_t)side ? right_ear_values : left_ear_values;
-	}
+  }
 
-	/**
-	 * Calculates an interpolated value from the entries array that should be accurate at the given angle
-	 *
-	 * 'angle' is an amount in radians, where 0 is straight ahead, and pi/2 is out to the right
-	 */
-	float get_value(float angle) {
+  /**
+   * Calculates an interpolated value from the entries array that should be accurate at the given angle
+   *
+   * 'angle' is an amount in radians, where 0 is straight ahead, and pi/2 is out to the right
+   */
+  float get_value(float angle) {
     angle *= 180 / M_PI;
-		while (angle >= 360.0f || angle < 0.0f) {
-			if (angle > 360.0f)
-				angle -= 360.0f;
-			else
-				angle += 360.0f;
-		}
+    while (angle >= 360.0f || angle < 0.0f) {
+      if (angle > 360.0f)
+        angle -= 360.0f;
+      else
+        angle += 360.0f;
+    }
 
-		uint32_t low_index = (uint32_t)((angle / 360.0f) * num_entries) % num_entries;
-		uint32_t high_index = (low_index + 1) % num_entries;
+    uint32_t low_index = (uint32_t)((angle / 360.0f) * num_entries) % num_entries;
+    uint32_t high_index = (low_index + 1) % num_entries;
 
-		float low_value = entries[low_index];
-		float high_value = entries[high_index];
+    float low_value = entries[low_index];
+    float high_value = entries[high_index];
 
-		float interval = 360.0f / num_entries;
-		float angle_dif = angle - (low_index * interval);
-		float interp_ratio_from_low = angle_dif / interval;
+    float interval = 360.0f / num_entries;
+    float angle_dif = angle - (low_index * interval);
+    float interp_ratio_from_low = angle_dif / interval;
 
-		// 10^(x/20)
-		float temp = (low_value * (1 - interp_ratio_from_low)) + (high_value * interp_ratio_from_low);
-		return pow(10, temp / 20 * POW_MOD);
-	}
+    // 10^(x/20)
+    float temp = (low_value * (1 - interp_ratio_from_low)) + (high_value * interp_ratio_from_low);
+    return pow(10, temp / 20 * POW_MOD);
+  }
 };
 
 float idk(float in) {
@@ -131,7 +131,7 @@ public:
   SoundPlayer(const char *filename, const float initPos) : currentPlayOffset(0) {
     // Read file
     LoadSound(filename);
-    
+
     // Setup PolarStorages
     leftPS = new PolarStorage(PolarStorage::earSide::LEFT);
     rightPS = new PolarStorage(PolarStorage::earSide::RIGHT);
@@ -291,9 +291,9 @@ public:
     // Teardown
     iac->Stop();
     SAFE_RELEASE(immde)
-    SAFE_RELEASE(immd)
-    SAFE_RELEASE(iac)
-    SAFE_RELEASE(iarc)
+      SAFE_RELEASE(immd)
+      SAFE_RELEASE(iac)
+      SAFE_RELEASE(iarc)
   }
 
   void Teardown() {
@@ -304,10 +304,10 @@ public:
 
 
 void main(int argc, char *argv[]) {
-	if (false && argc > 2) {
-		printf("Usage: %s [options]\n\t\toptions:\n\t\t-d   disable Interaural Time Difference feature.", argv[0]);
-		return;
-	}
+  if (false && argc > 2) {
+    printf("Usage: %s [options]\n\t\toptions:\n\t\t-d   disable Interaural Time Difference feature.", argv[0]);
+    return;
+  }
 
   // The Sound Player
   SoundPlayer sp("C:/Users/Johnathan/Desktop/Classes/Senior Project/flamenco.wav", 0);
@@ -317,38 +317,38 @@ void main(int argc, char *argv[]) {
 
   ////////////////
 
-	//sf::SoundBuffer buffer_left;
-	//sf::SoundBuffer buffer_right;
-	//buffer_left.loadFromSamples(leftSamples, num_samples, 2, buffer.getSampleRate());
-	//buffer_right.loadFromSamples(rightSamples, num_samples, 2, buffer.getSampleRate());
-	//
-	//sf::Sound left_clip;
-	//sf::Sound right_clip;
-	//left_clip.setLoop(true);
-	//right_clip.setLoop(true);
-	//left_clip.setBuffer(buffer_left);
-	//right_clip.setBuffer(buffer_right);
+  //sf::SoundBuffer buffer_left;
+  //sf::SoundBuffer buffer_right;
+  //buffer_left.loadFromSamples(leftSamples, num_samples, 2, buffer.getSampleRate());
+  //buffer_right.loadFromSamples(rightSamples, num_samples, 2, buffer.getSampleRate());
+  //
+  //sf::Sound left_clip;
+  //sf::Sound right_clip;
+  //left_clip.setLoop(true);
+  //right_clip.setLoop(true);
+  //left_clip.setBuffer(buffer_left);
+  //right_clip.setBuffer(buffer_right);
 
-	//if (argc < 2) {
-	//	if ((int)(position * 180 / M_PI) % 360 <= 180) {
-	//		right_clip.setPlayingOffset(init_offset);
-	//	}
-	//	else {
-	//		left_clip.setPlayingOffset(init_offset);
-	//	}
-	//}
+  //if (argc < 2) {
+  //	if ((int)(position * 180 / M_PI) % 360 <= 180) {
+  //		right_clip.setPlayingOffset(init_offset);
+  //	}
+  //	else {
+  //		left_clip.setPlayingOffset(init_offset);
+  //	}
+  //}
 
-	//left_clip.setVolume(left_boost * BOOST_CONST + SHIFT_CONST);
-	//right_clip.setVolume(right_boost * BOOST_CONST + SHIFT_CONST);
+  //left_clip.setVolume(left_boost * BOOST_CONST + SHIFT_CONST);
+  //right_clip.setVolume(right_boost * BOOST_CONST + SHIFT_CONST);
 
-	//left_clip.play();
-	//right_clip.play();
+  //left_clip.play();
+  //right_clip.play();
 
-	//float new_position, shift_l, shift_r, itd_old, itd_new, itd_delta, pitch_l, pitch_r;
-	//DWORD start_ticks = GetTickCount();
-	//DWORD current_ticks, last_ticks = start_ticks;
+  //float new_position, shift_l, shift_r, itd_old, itd_new, itd_delta, pitch_l, pitch_r;
+  //DWORD start_ticks = GetTickCount();
+  //DWORD current_ticks, last_ticks = start_ticks;
 
-	//itd_old = HEAD_RADIUS * (idk(position) + sinf(idk(position))) / SPEED_OF_SOUND;
+  //itd_old = HEAD_RADIUS * (idk(position) + sinf(idk(position))) / SPEED_OF_SOUND;
  // printf("itd_old = %.6f\n\n", itd_old);
 
  // // dynamics loop
@@ -395,6 +395,6 @@ void main(int argc, char *argv[]) {
  //   }
  // }
 
-	//left_clip.stop();
-	//right_clip.stop();
+  //left_clip.stop();
+  //right_clip.stop();
 }
