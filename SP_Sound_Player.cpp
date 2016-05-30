@@ -268,14 +268,10 @@ public:
 
       // Calculate how much buffer space is available
       numFramesAvailable = deviceBufferLength - numFramesPadding;
-      //printf(">>> In Play: numFramesAvailable = %u, deviceBufferLength = %u, numFramesPadding = %u\n", numFramesAvailable, deviceBufferLength, numFramesPadding);
 
       // Grab all the available space in the shared buffer.
       hr = iarc->GetBuffer(numFramesAvailable, &deviceBuffer);
       EXIT_ON_ERROR(hr);
-
-      // Update the position of the sound source
-      //UpdatePosition((GetTickCount() - startTime) * RADIANS_PER_MS);
 
       // Get next 1/2-second of data from the audio source.
       GetNextModifiedFrames(numFramesAvailable, deviceBuffer, &flags);
@@ -314,87 +310,4 @@ void main(int argc, char *argv[]) {
   printf("> Before Play!\n");
   sp.Play();
   sp.Teardown();
-
-  ////////////////
-
-  //sf::SoundBuffer buffer_left;
-  //sf::SoundBuffer buffer_right;
-  //buffer_left.loadFromSamples(leftSamples, num_samples, 2, buffer.getSampleRate());
-  //buffer_right.loadFromSamples(rightSamples, num_samples, 2, buffer.getSampleRate());
-  //
-  //sf::Sound left_clip;
-  //sf::Sound right_clip;
-  //left_clip.setLoop(true);
-  //right_clip.setLoop(true);
-  //left_clip.setBuffer(buffer_left);
-  //right_clip.setBuffer(buffer_right);
-
-  //if (argc < 2) {
-  //	if ((int)(position * 180 / M_PI) % 360 <= 180) {
-  //		right_clip.setPlayingOffset(init_offset);
-  //	}
-  //	else {
-  //		left_clip.setPlayingOffset(init_offset);
-  //	}
-  //}
-
-  //left_clip.setVolume(left_boost * BOOST_CONST + SHIFT_CONST);
-  //right_clip.setVolume(right_boost * BOOST_CONST + SHIFT_CONST);
-
-  //left_clip.play();
-  //right_clip.play();
-
-  //float new_position, shift_l, shift_r, itd_old, itd_new, itd_delta, pitch_l, pitch_r;
-  //DWORD start_ticks = GetTickCount();
-  //DWORD current_ticks, last_ticks = start_ticks;
-
-  //itd_old = HEAD_RADIUS * (idk(position) + sinf(idk(position))) / SPEED_OF_SOUND;
- // printf("itd_old = %.6f\n\n", itd_old);
-
- // // dynamics loop
- // while (true) {
- //   if (DYNAMIC) {
- //     current_ticks = GetTickCount();
-
- //     // Set ILD
- //     new_position = position + RADIANS_PER_MS * (current_ticks - start_ticks);
- //     left_boost = left_ear_polar.get_value(new_position);
- //     right_boost = right_ear_polar.get_value(new_position);
-
- //     left_clip.setVolume(left_boost * BOOST_CONST + SHIFT_CONST);
- //     right_clip.setVolume(right_boost * BOOST_CONST + SHIFT_CONST);
-
- //     /*Dsp::Legendre::BandStop<16> bs;
- //     bs.setup(11, 1, 1, 1);
- //     bs.process(1, NULL, ;*/
-
- //     // Set ITD
- //     itd_new = HEAD_RADIUS * (idk(new_position) + sinf(idk(new_position))) / SPEED_OF_SOUND;
- //     itd_delta = itd_new - itd_old;  // positive for going right, negative for going left
- //     shift_r = itd_delta / 2 * SHIFT_MULT;
- //     shift_l = -shift_r;
- //     pitch_l = (shift_l + DELTA_TIME) / DELTA_TIME;
- //     pitch_r = (shift_r + DELTA_TIME) / DELTA_TIME;
-
- //     printf("left pitch = %.5f, right_pitch = %.5f, shift = %.8f, position diff = %ld\n",
- //       pitch_l, pitch_r, shift_r, left_clip.getPlayingOffset().asMicroseconds() - right_clip.getPlayingOffset().asMicroseconds());
-
- //     //printf("itd_new %.6f, pitch_l %.5f, pitch_r %.5f, shift_r %.6f\n", itd_new, pitch_l, pitch_r, shift_r);
-
- //     left_clip.setPitch(argc == 2 ? 1 : pitch_l);
- //     right_clip.setPitch(argc == 2 ? 1 : pitch_r);
-
- //     itd_old = itd_new;
-
- //     // handle timing
- //     current_ticks = GetTickCount();
- //     DWORD diff = current_ticks - last_ticks;
- //     if (diff < DELTA_TIME * 1000)
- //       Sleep((DELTA_TIME * 1000) - diff);
- //     last_ticks = GetTickCount();
- //   }
- // }
-
-  //left_clip.stop();
-  //right_clip.stop();
 }
